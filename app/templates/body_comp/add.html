@@ -1,0 +1,57 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <a class="ui basic compact button" href="{{ url_for('body_comp.index') }}">
+                <i class="caret left icon"></i>
+                Back to Body composition
+            </a>
+            <h2 class="ui header">
+                Add New Record
+            </h2>
+
+            {% set flashes = {
+                'error':   get_flashed_messages(category_filter=['form-error']),
+                'warning-date': get_flashed_messages(category_filter=['form-check-date']),
+                'warning-weight': get_flashed_messages(category_filter=['form-check-weight']),
+                'info':    get_flashed_messages(category_filter=['form-info']),
+                'success': get_flashed_messages(category_filter=['form-success'])
+            } %}
+
+            {{ f.begin_form(form, flashes) }}
+
+                <div class="two fields">
+                    {{ f.render_form_field(form.date) }}
+                    {{ f.render_form_field(form.weight) }}
+                </div>
+
+                {{ f.render_form_field(form.body_fat) }}
+                {{ f.render_form_field(form.chest) }}
+                {{ f.render_form_field(form.arm) }}
+                {{ f.render_form_field(form.waist) }}
+                {{ f.render_form_field(form.belly) }}
+                {{ f.render_form_field(form.thigh) }}
+                {{ f.render_form_field(form.calf) }}
+                {{ f.render_form_field(form.forearm) }}
+
+
+
+                {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
+                {{ f.form_message(flashes['warning-date'], header='Check your date.', class='warning') }}
+                {{ f.form_message(flashes['warning-weight'], header='Check your weight input.', class='warning') }}
+                {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+
+                {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
+                    {{ f.render_form_field(field) }}
+                {% endfor %}
+
+            {{ f.end_form() }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,366 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+
+{% block content %}
+    {% set flashes = {
+        'error':   get_flashed_messages(category_filter=['form-error']),
+        'warning': get_flashed_messages(category_filter=['form-check-email']),
+        'info':    get_flashed_messages(category_filter=['form-info']),
+        'success': get_flashed_messages(category_filter=['form-success'])
+    } %}
+
+    {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
+    {{ f.form_message(flashes['warning-meal-name'], header='Invalid Meal Name.', class='warning') }}
+    {{ f.form_message(flashes['warning-copy-date'], header='Invalid Copy Date.', class='warning') }}
+    {{ f.form_message(flashes['info'], header='Information', class='info') }}
+    {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+
+    <div class="ui two column stackable grid container">
+        <div class="eight wide column">
+
+            {{ f.begin_form(select_day_form, flashes, extra_classes='fluid segment') }}
+                <div class="inline fields">
+                    {{ f.render_form_field(select_day_form.date, extra_classes='fourteen wide') }}
+                    <div class="ui submit button" id="select_day_btn">{{ select_day_form.submit.label.text }}</div>
+                </div>
+            {{ f.end_form() }}
+
+            {{ f.begin_form(add_meal_form, flashes, extra_classes='fluid segment') }}
+
+
+                <div class="inline fields">
+                    {{ f.render_form_field(add_meal_form.name, extra_classes='eight wide') }}
+                    {{ f.render_form_field(add_meal_form.time, extra_classes='eight wide') }}
+                    <div class="ui submit button" id="submit_meal_btn"> {{ add_meal_form.submit.label.text }}</div>
+                </div>
+
+            {{ f.end_form() }}
+
+            {{ f.begin_form(add_meal_form, flashes, extra_classes='fluid segment') }}
+                <div class="inline fields">
+                    {{ f.render_form_field(copy_meal_form.date, extra_classes='fourteen wide') }}
+                    <div class="ui submit button" id="copy_meal_btn">{{ copy_meal_form.submit.label.text }}</div>
+                </div>
+            {{ f.end_form() }}
+
+            <div class="ui styled accordion">
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    <div class="ui horizontal list">
+                        <a class="item">
+                            <div class="active content">
+                                Breakfast
+                            </div>
+                        </a>
+                        <a class="item">
+                            <div class="content">
+                                <div class="header">Calories</div>
+                                97
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="accordion">
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Preworkout
+                        </div>
+                        <div class="content">
+                            <div class="accordion">
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    Protein Isolate
+                                </div>
+                                <div class="content">
+                                    <div class="ui form">
+                                        <div class="field">
+                                            <label class="transition visible">Calories</label>
+                                            <div class="ui right labeled input">
+                                                <input type="text" placeholder="Enter Calories...">
+                                                <div class="ui basic label">
+                                                    cal
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    Caffeine
+                                </div>
+                                <div class="content">
+                                    list here
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    Dinner
+                </div>
+                <div class="content">
+                    <div class="accordion">
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Salad
+                        </div>
+                        <div class="content">
+                            <div class="accordion">
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    Tomato
+                                </div>
+                                <div class="content">
+                                    List here
+                                </div>
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    Cucumber
+                                </div>
+                                <div class="content">
+                                    List here
+                                </div>
+                            </div>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Atlantic Salmon
+                        </div>
+                        <div class="content">
+                            List here
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="ui styled accordion">-->
+                <!--<div class="active title">-->
+                    <!--<i class="dropdown icon"></i>-->
+                    <!--Dinner-->
+                <!--</div>-->
+
+                <!--<div class="active content">-->
+
+                    <!--<div class="ui styled accordion">-->
+                        <!--<div class="active title">-->
+                            <!--<i class="dropdown icon"></i>-->
+                            <!--<div class="ui horizontal list">-->
+                                <!--<a class="item">-->
+                                    <!--<div class="active content">-->
+                                        <!--Chicken Breast Meat-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                                <!--<a class="item">-->
+                                    <!--<div class="active content">-->
+                                        <!--<div class="header">Calories</div>-->
+                                        <!--150-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="active content field">-->
+                            <!--<div class="ui form">-->
+                                <!--<div class="field">-->
+                                    <!--<label class="transition visible">Calories</label>-->
+                                    <!--<div class="ui right labeled input">-->
+                                        <!--<input type="text" placeholder="Enter Calories...">-->
+                                        <!--<div class="ui basic label">-->
+                                            <!--cal-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+
+
+        </div>
+        <div class="eight wide column">
+            <div class="ui fluid segment">
+                <div class="ui fluid action input">
+                    <input type="text" id="search_input" placeholder="Search Food...">
+                    <select class="ui compact selection dropdown" id="search_by_value">
+                        {% for s in search_by %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                    <div id="search" class="ui button">Search</div>
+                </div>
+
+                <div style="overflow-x: scroll;">
+                    <table class="ui structured celled table">
+                        <thead>
+                            <tr>
+                                {% for t in table_cols %}
+                                    <th>{{ t }}</th>
+                                {% endfor %}
+                                <th colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="search_result">
+                        <!--add search results here from #search request, each result row is one <tr>-->
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="7">
+                                    <div class="ui right floated pagination menu">
+                                        <a class="icon item">
+                                            <i class="left chevron icon" id="next_page"></i>
+                                        </a>
+                                        <a class="item">1</a>
+                                        <a class="item">2</a>
+                                        <a class="item">3</a>
+                                        <a class="item">4</a>
+                                        <a class="icon item">
+                                            <i class="right chevron icon" id="previous_page"></i>
+                                        </a>
+                                    </div>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="ui fluid form segment">
+                <div class="ui form">
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Calories</label>
+                            <input readonly="" type="text">
+                        </div>
+                        <div class="field">
+                            <label>Carbs</label>
+                            <input readonly="" type="text">
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Protein</label>
+                            <input readonly="" type="text">
+                        </div>
+                        <div class="field">
+                            <label>Fats</label>
+                            <input readonly="" type="text">
+                        </div>
+                    </div>
+                </div>
+                Diagram here
+            </div>
+        </div>
+    </div>
+
+<script>
+$('.ui.accordion').accordion();
+
+var csrf_token = "{{ csrf_token() }}";
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+        }
+    }
+});
+
+$('#search').click( function() {
+    var e = document.getElementById("search_by_value")
+    $.ajax({
+        type : "POST",
+        url : "{{ url_for('diet_diary.index') }}",
+        data: JSON.stringify({
+                id: "search",
+                search_input: document.getElementById("search_input").value,
+                search_by_value: e.options[e.selectedIndex].value
+            }),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+            var actions_html = `<td class="selectable">
+                                    <a href="#">Copy</a>
+                                </td>
+                                <td class="selectable">
+                                    <a href="#">Details</a>
+                                </td>`;
+            html_result = ""
+            for (i = 0; i < result["search_result"].length; ++i) {
+                html_result += "<tr>"
+                for (j = 0; j < result["search_result"][i].length; ++j) {
+                    html_result += "<td>" + result["search_result"][i][j] + "</td>"
+                }
+                html_result += actions_html + "</tr>"
+            }
+            document.getElementById("search_result").innerHTML = html_result;
+            console.log(result["search_result"]);
+        }
+    });
+});
+
+$('#submit_meal_btn').click( function() {
+
+
+    $.ajax({
+        type : "POST",
+        url : "{{ url_for('diet_diary.index') }}",
+        data: JSON.stringify({
+                id: "add_meal",
+                name: document.getElementById("meal_name").value,
+                time: document.getElementById("meal_time").value
+            }),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+            console.log(result["success"]);  // TODO render new meal node
+        }
+    });
+});
+
+$('#copy_meal_btn').click( function() {
+    $.ajax({
+        type : "POST",
+        url : "{{ url_for('diet_diary.index') }}",
+        data: JSON.stringify({
+                id: "copy_meal_btn",
+                known: "edesrdfgsdrrhb"
+            }),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+            console.log(result);
+        }
+    });
+});
+
+$('#next_page').click( function() {
+    $.ajax({
+        type : "POST",
+        url : "{{ url_for('diet_diary.index') }}",
+        data: JSON.stringify({
+                id: "next_page",
+                known: "edesrdfgsdrrhb"
+            }),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+            console.log(result);
+        }
+    });
+});
+
+$('#previous_page').click( function() {
+    $.ajax({
+        type : "POST",
+        url : "{{ url_for('diet_diary.index') }}",
+        data: JSON.stringify({
+                id: "previous_page",
+                known: "edesrdfgsdrrhb"
+            }),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+            console.log(result);
+        }
+    });
+});
+</script>
+{% endblock %}

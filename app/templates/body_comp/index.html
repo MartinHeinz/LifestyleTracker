@@ -1,0 +1,38 @@
+{% extends 'layouts/base.html' %}
+
+
+{% macro dashboard_option(title, endpoint, description=None, icon=None) %}
+    <a class="column" href="{{ url_for(endpoint) }}">
+        <div class="ui padded segment">
+            <h3 class="ui header">
+                {% if icon is not none %}
+                    <i class="{{ icon }}"></i>
+                {% endif %}
+                <div class="content">
+                    {{ title }}
+                    {% if description is not none %}
+                        <div class="sub header">
+                            {{ description }}
+                        </div>
+                    {% endif %}
+                </div>
+            </h3>
+        </div>
+    </a>
+{% endmacro %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <h2 class="ui header">
+                Body composition dashboard
+            </h2>
+            <div class="ui two column stackable grid">
+                {{ dashboard_option('Add New Record', 'body_comp.add',
+                                    description='Add new body composition record', icon='add icon') }}
+                  {{ dashboard_option('List All', 'body_comp.list_all',
+                                    description='Browse all existing body composition records', icon='list icon') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <div class="ui stackable grid container">
+        <div class="sixteen wide tablet twelve wide computer centered column">
+            <a class="ui basic compact button" href="{{ url_for('body_comp.index') }}">
+                <i class="caret left icon"></i>
+                Back to dashboard
+            </a>
+            <h2 class="ui header">
+                Body Composition Records
+                <div class="sub header">
+                    View and manage existing body composition records.
+                </div>
+            </h2>
+
+
+            {# Use overflow-x: scroll so that mobile views don't freak out
+             # when the table is too wide #}
+            <div style="overflow-x: scroll;">
+                <table class="ui searchable sortable unstackable selectable celled table">
+                    <thead>
+                        <tr>
+                            <th class="sorted ascending">Day</th>
+                            <th>Weight</th>
+                            <th>Body Fat</th>
+                            <th>Chest</th>
+                            <th>Arm</th>
+                            <th>Waist</th>
+                            <th>Belly</th>
+                            <th>Thigh</th>
+                            <th>Calf</th>
+                            <th>Forearm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for bc in body_comps | sort(attribute='day.date') %}
+                        <tr onclick="window.location.href = '{{ url_for('body_comp.edit', body_comp_id=bc.id) }}';">
+                            <td>{{ bc.day.date }}</td>
+                            <td>{{ bc.weight }}</td>
+                            <td>{{ bc.body_fat }}</td>
+                            <td>{{ bc.chest }}</td>
+                            <td>{{ bc.arm }}</td>
+                            <td>{{ bc.waist }}</td>
+                            <td>{{ bc.belly }}</td>
+                            <td>{{ bc.thigh }}</td>
+                            <td>{{ bc.calf }}</td>
+                            <td>{{ bc.forearm }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
