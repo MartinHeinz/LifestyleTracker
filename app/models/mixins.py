@@ -10,16 +10,14 @@ class MixinGetByName(object):
 
 
 class MixinSearch(object):
-
-    @classmethod
+    @classmethod  # TODO search only through specific user data?
     def search_by_attribute(cls, session, search_string, field):
         words = " & ".join(search_string.split())
         return session.query(cls). \
             filter(func.to_tsvector('english', getattr(cls, field)).match(words, postgresql_regconfig='english')).all()
 
-    @classmethod
+    @classmethod  # TODO search only through specific user data?
     def get_closest_matches(cls, session, search_value, field, delta):
         col = getattr(cls, field)
         return session.query(cls). \
-            filter(and_(col >= search_value-delta, col <= search_value+delta))
-
+            filter(and_(col >= search_value - delta, col <= search_value + delta))

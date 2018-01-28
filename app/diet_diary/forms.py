@@ -10,7 +10,7 @@ from ..models import Role, User
 
 
 class SelectDayForm(Form):
-    date = DateField("Select Day", validators=[InputRequired()])
+    date = DateField("Select Day", id="select_day", validators=[InputRequired()])
     submit = SubmitField('Show')
 
 

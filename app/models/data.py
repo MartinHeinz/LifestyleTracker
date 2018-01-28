@@ -4,7 +4,7 @@ from itertools import chain
 
 import decimal
 from sqlalchemy import Table, Column, Integer, ForeignKey, Date, Numeric, String, Text, Boolean, Time, and_, or_, cast, \
-    func, CheckConstraint
+    func, CheckConstraint, UniqueConstraint
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects import postgresql
 
@@ -71,11 +71,13 @@ food_tag_table = db.Table('food_tag',
 
 class Day(db.Model):
     __tablename__ = 'day'
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = (UniqueConstraint("date", "user_id", name="date_user_constraint"),
+                      {'extend_existing': True},
+                      )
 
     id = Column(Integer, primary_key=True)
     body_composition = relationship("BodyComposition", uselist=False, back_populates="day")
-    date = Column(Date, unique=True)
+    date = Column(Date)
     target_cal = Column(postgresql.INT4RANGE)
     target_carbs = Column(postgresql.INT4RANGE)
     target_protein = Column(postgresql.INT4RANGE)
@@ -84,22 +86,26 @@ class Day(db.Model):
     training_id = Column(Integer, ForeignKey('training.id'))
     training = relationship("Training", uselist=False, back_populates="day")
     meals = relationship("Meal", cascade="all, delete-orphan", back_populates="day")
-    user_id = Column(String, ForeignKey('user.email'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship("User", back_populates="days")
 
     @classmethod
-    def get_by_date(cls, session, date):
-        return session.query(cls).filter(cls.date == date).scalar()
+    def get_by_date(cls, session, date, user):
+        return session.query(cls).join(User).filter(and_(cls.date == date,
+                                                         user.id == User.id)).scalar()
 
     @classmethod
-    def get_most_recent(cls, session):
-        return session.query(cls).order_by(cls.date.desc()).first()
+    def get_most_recent(cls, session, user):
+        return session.query(cls).join(User)\
+            .filter(user.id == User.id)\
+            .order_by(cls.date.desc()).first()  # user.id == User.id? alebo user.id == cls.user_id
 
     @classmethod
-    def get_most_recent_passed(cls, session):
+    def get_most_recent_passed(cls, session, user):
         """ Returns day in interval <first - today> that is closest to today and is
         contained in database."""
-        return session.query(cls).filter(cls.date <= date.today()).order_by(cls.date.desc()).first()
+        return session.query(cls).filter(and_(cls.date <= date.today(),
+                                              user.id == cls.user_id)).order_by(cls.date.desc()).first()
 
 
 class BodyComposition(db.Model):
@@ -269,6 +275,18 @@ class Meal(MixinGetByName, db.Model):
     day = relationship("Day", back_populates="meals")
     time = Column(Time)
     recipes = relationship("Recipe", cascade="all, delete-orphan", back_populates="meal")
+
+    @property
+    def serialize(self):
+        return {
+            'name': self.name,
+            'id': self.id,
+            #'foods': [item.serialize() for item in self.foods],  # TODO
+            'day_id': self.day_id,
+            #'day': self.day.serialize(),   # TODO
+            'time': self.time,  # TODO is this correct (strftime?)
+            #'recipes': [item.serialize() for item in self.recipes]   # TODO
+        }
 
     def add_food(self, food, amount, measurement=None):
         food_usage = FoodUsage(amount=amount)

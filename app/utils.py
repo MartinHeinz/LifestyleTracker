@@ -1,3 +1,5 @@
+import time
+from dateutil.parser import parse
 from flask import url_for
 
 
@@ -18,3 +20,19 @@ def register_template_utils(app):
 
 def index_for_role(role):
     return url_for(role.index)
+
+
+def is_date(value):
+    try:
+        parse(value)
+        return True
+    except ValueError:
+        return False
+
+
+def is_time(value):
+    try:
+        time.strptime(value, '%H:%M')
+        return True
+    except ValueError:
+        return False

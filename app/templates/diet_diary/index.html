@@ -44,7 +44,7 @@
                 </div>
             {{ f.end_form() }}
 
-            <div class="ui styled accordion">
+            <div class="ui styled accordion" id="meal_tree">
                 <div class="title">
                     <i class="dropdown icon"></i>
                     <div class="ui horizontal list">
@@ -256,6 +256,20 @@
     </div>
 
 <script>
+
+if (!String.prototype.format) {  // TODO dat toto niekam von a importovat
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
+
 $('.ui.accordion').accordion();
 
 var csrf_token = "{{ csrf_token() }}";
@@ -296,6 +310,80 @@ $('#search').click( function() {
             }
             document.getElementById("search_result").innerHTML = html_result;
             console.log(result["search_result"]);
+        }
+    });
+});
+
+$('#select_day_btn').click( function() {
+
+    $.ajax({
+        type : "POST",
+        url : "{{ url_for('diet_diary.index') }}",
+        data: JSON.stringify({
+                id: "select_day",
+                date: document.getElementById("select_day").value,
+            }),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+            console.log(result);  // TODO render new meal node
+            document.getElementById("meal_tree").innerHTML = ""
+            for (i = 0; i < result["meals"].length; ++i) {
+                name = result["meals"][i]["name"];
+                calories = "TODO";
+                var header_template = `<div class="title">
+                                <i class="dropdown icon"></i>
+                                <div class="ui horizontal list">
+                                    <a class="item">
+                                        <div class="active content">
+                                            ${name}
+                                        </div>
+                                    </a>
+                                    <a class="item">
+                                        <div class="content">
+                                            <div class="header">Calories</div>
+                                            ${calories}
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>`
+                var content_template = `<div class="content">
+                                    <div class="accordion">
+                                        <div class="title">
+                                            <i class="dropdown icon"></i>
+                                                Preworkout
+                                        </div>
+                                        <div class="content">
+                                            <div class="accordion">
+                                                <div class="title">
+                                                    <i class="dropdown icon"></i>
+                                                        Protein Isolate
+                                                </div>
+                                                <div class="content">
+                                                    <div class="ui form">
+                                                        <div class="field">
+                                                            <label class="transition visible">Calories</label>
+                                                            <div class="ui right labeled input">
+                                                                <input type="text" placeholder="Enter Calories...">
+                                                                <div class="ui basic label">
+                                                                cal
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="title">
+                                                    <i class="dropdown icon"></i>
+                                                    Caffeine
+                                                </div>
+                                                <div class="content">
+                                                list here
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                document.getElementById("meal_tree").innerHTML += header_template + content_template;
+            }
         }
     });
 });
@@ -364,3 +452,56 @@ $('#previous_page').click( function() {
 });
 </script>
 {% endblock %}
+
+<div class="title">
+    <i class="dropdown icon"></i>
+    <div class="ui horizontal list">
+        <a class="item">
+            <div class="active content">
+                Breakfast
+            </div>
+        </a>
+        <a class="item">
+            <div class="content">
+                <div class="header">Calories</div>
+                97
+            </div>
+        </a>
+    </div>
+</div>
+<div class="content">
+    <div class="accordion">
+        <div class="title">
+            <i class="dropdown icon"></i>
+            Preworkout
+        </div>
+        <div class="content">
+            <div class="accordion">
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    Protein Isolate
+                </div>
+                <div class="content">
+                    <div class="ui form">
+                        <div class="field">
+                            <label class="transition visible">Calories</label>
+                            <div class="ui right labeled input">
+                                <input type="text" placeholder="Enter Calories...">
+                                <div class="ui basic label">
+                                    cal
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    Caffeine
+                </div>
+                <div class="content">
+                    list here
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
